@@ -8,7 +8,6 @@ import sys
 import os
 import signal
 
-
 Runner.print_on_exit = True
 
 
@@ -115,3 +114,12 @@ def test_uses_last_screenshot_if_server_goes_away():
         controller = h.report_variables()[r.CONTROLLER]
         os.kill(controller, signal.SIGKILL)
         assert "Hello" in h.screenshot()
+
+
+def test_can_capture_curses_hline_and_vline_characters():
+    with Runner("./tests/fixtures/box.py") as h:
+        h.await_text("┌──────────┐")
+        h.await_text("│I am a box│")
+        h.await_text("└──────────┘")
+        h.press("q")
+        h.await_exit()
